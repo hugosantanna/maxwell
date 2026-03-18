@@ -1,112 +1,141 @@
 # Maxwell - Parts List
 
-## Required Parts
+## Car Parts
 
-| # | Component | Qty | Est. Price | Search Keywords |
+| # | Component | Qty | Est. Price | Search on Amazon |
 |---|-----------|-----|-----------|-----------------|
-| 1 | ESP32-CAM (with OV2640 camera) | 1 | $6-10 | "ESP32-CAM MB" (get the one with USB board) |
+| 1 | ESP32-CAM with OV2640 camera + USB programmer | 1 | $6-10 | "ESP32-CAM MB WiFi Bluetooth" |
 | 2 | 2WD Robot Car Chassis Kit | 1 | $10-15 | "2WD robot car chassis Arduino" |
-| 3 | L298N Motor Driver Module | 1 | $3-5 | "L298N dual H-bridge" |
-| 4 | 18650 Batteries | 2 | $4-6 | "18650 rechargeable 3.7V" |
-| 5 | 18650 Battery Holder (2-slot w/ switch) | 1 | $1-2 | "2x 18650 battery holder with switch" |
-| 6 | Jumper Wires (F-F, M-F) | 1 pack | $2-3 | "dupont jumper wires kit" |
-| 7 | TP4056 Charging Module (USB-C) | 1 | $1-2 | "TP4056 USB-C lithium charger module" |
-| 8 | Pogo Pins (spring-loaded, 2-pin) | 1 pair | $1-2 | "pogo pin spring loaded connector 2P" |
-| 9 | Copper Tape (adhesive) | 1 roll | $1-2 | "copper foil tape adhesive conductive" |
-| 10 | 18650 USB Charger (backup/initial) | 1 | $5-8 | "18650 battery charger USB" |
+| 3 | L298N Motor Driver Module | 1 | $3-5 | "L298N dual H-bridge motor driver" |
+| 4 | 18650 Rechargeable Batteries (3.7V) | 2 | $4-6 | "18650 rechargeable battery 3.7V" |
+| 5 | 18650 Battery Holder (2-slot with switch) | 1 | $1-2 | "18650 battery holder 2 slot switch" |
+| 6 | TP4056 USB-C Lithium Charger Module | 1 | $1-2 | "TP4056 USB-C lithium charger module" |
+| 7 | 2-Pin Magnetic Pogo Connector (car side) | 1 | $1-2 | "magnetic pogo pin connector 2 pin" |
+| 8 | Jumper Wires (F-F and M-F) | 1 pack | $2-3 | "dupont jumper wire kit" |
 
-**Estimated Total: $35-55**
+**Car subtotal: ~$28-45**
 
-## What comes in the 2WD Chassis Kit
+## Supercharger Dock Parts
+
+| # | Component | Qty | Est. Price | Search on Amazon |
+|---|-----------|-----|-----------|-----------------|
+| 9 | Arduino Nano (or clone) | 1 | $3-5 | "Arduino Nano V3 CH340" |
+| 10 | SG90 Micro Servo Motor | 1 | $2-3 | "SG90 micro servo 9g" |
+| 11 | IR Obstacle Avoidance Sensor (FC-51) | 1 | $1-2 | "IR obstacle avoidance sensor FC-51" |
+| 12 | 2-Pin Magnetic Pogo Connector (cable side) | 1 | $1-2 | "magnetic pogo pin connector 2 pin" |
+| 13 | Thin Silicone Wire (flexible, 26AWG) | 1 ft | $1 | "silicone wire 26AWG" |
+| 14 | Red LED | 1 | $0.25 | "5mm red LED" |
+| 15 | Green LED | 1 | $0.25 | "5mm green LED" |
+| 16 | 220 ohm Resistors | 2 | $0.25 | "220 ohm resistor pack" |
+| 17 | 5V USB Power Supply | 1 | $0 | Any phone charger + USB cable |
+
+**Dock subtotal: ~$9-14**
+
+## Total Budget: ~$37-59
+
+## Optional Extras
+
+| Component | Price | What it adds |
+|-----------|-------|-------------|
+| 18650 USB Charger (backup) | $5-8 | Charge batteries outside the car |
+| 3D-Printed Cybertruck Shell | $10-20 | Tesla body for the car |
+| 3D-Printed Supercharger Stall | $2-5 | Miniature Tesla Supercharger housing |
+| Copper Tape (conductive adhesive) | $1-2 | Alternative to magnetic connectors |
+
+## What Comes in the 2WD Chassis Kit
 
 - 2x DC gear motors (3-6V)
 - 2x Wheels
 - 1x Caster wheel (front)
-- 1x Acrylic chassis plate (sometimes 2 plates)
+- 1x Acrylic chassis plate
 - Mounting screws and standoffs
-- Battery box (you can use this OR the 18650 holder above)
-
-## Build Phases
-
-| Phase | What | Folder |
-|-------|------|--------|
-| 1 | Motor test — verify wiring | phase1_motor_control/ |
-| 2 | Camera test — verify WiFi stream | phase2_camera/ |
-| 3 | Full FPV car — camera + PS5 controller | phase3_full_car/ |
-| 4 | Charging dock — drive in and charge | phase4_charging_dock/ |
+- Battery box (not used — we use 18650 holder instead)
 
 ## Wiring Diagram — Car
 
 ```
-ESP32-CAM + L298N + TP4056 Wiring
-==================================
+ESP32-CAM + L298N + TP4056
+============================
 
-Power (normal driving):
-  18650 Batteries (+) --> TP4056 BAT+ --> L298N 12V input
-  18650 Batteries (-) --> TP4056 BAT- --> L298N GND
-  L298N 5V output     --> ESP32-CAM 5V
-  L298N GND           --> ESP32-CAM GND
+Power:
+  18650 Holder (+) --> TP4056 BAT+ --> L298N 12V input
+  18650 Holder (-) --> TP4056 BAT- --> L298N GND
+  L298N 5V output  --> ESP32-CAM 5V
+  L298N GND        --> ESP32-CAM GND
 
-Charging (TP4056 on the car):
-  Dock Pogo Pin (+)   --> TP4056 IN+ (or USB-C port)
-  Dock Pogo Pin (-)   --> TP4056 IN-
-  Copper pads on rear of car connect to pogo pins
+Charge Port (rear of car):
+  Magnetic connector (+) --> TP4056 IN+
+  Magnetic connector (-) --> TP4056 IN-
 
 Motor A (Left):
-  ESP32-CAM GPIO 14   --> L298N IN1
-  ESP32-CAM GPIO 15   --> L298N IN2
-  L298N OUT1          --> Left Motor (+)
-  L298N OUT2          --> Left Motor (-)
+  ESP32-CAM GPIO 14 --> L298N IN1
+  ESP32-CAM GPIO 15 --> L298N IN2
+  L298N OUT1        --> Left Motor (+)
+  L298N OUT2        --> Left Motor (-)
 
 Motor B (Right):
-  ESP32-CAM GPIO 13   --> L298N IN3
-  ESP32-CAM GPIO  2   --> L298N IN4
-  L298N OUT3          --> Right Motor (+)
-  L298N OUT4          --> Right Motor (-)
+  ESP32-CAM GPIO 13 --> L298N IN3
+  ESP32-CAM GPIO  2 --> L298N IN4
+  L298N OUT3        --> Right Motor (+)
+  L298N OUT4        --> Right Motor (-)
 
-Note: Remove the jumpers on ENA/ENB on the L298N
-      to use full speed, or connect to PWM pins for
-      speed control.
+Charging Status (TP4056 to ESP32):
+  TP4056 CHRG pin   --> ESP32-CAM GPIO 16 (LOW = charging)
+  TP4056 STDBY pin  --> ESP32-CAM GPIO 12 (LOW = full)
+
+Note: Remove the ENA/ENB jumpers on L298N for full speed,
+      or connect to PWM pins for variable speed control.
 ```
 
-## Wiring Diagram — Charging Dock
+## Wiring Diagram — Supercharger Dock
 
 ```
-Charging Dock (the "Supercharger")
-===================================
+Arduino Nano + Servo + IR Sensor
+==================================
 
-  USB 5V Adapter --> Pogo Pin (+) --> contacts Car Copper Pad (+)
-  USB GND        --> Pogo Pin (-) --> contacts Car Copper Pad (-)
+Power (from USB):
+  USB 5V  --> Nano 5V, Servo VCC, IR Sensor VCC
+  USB GND --> Nano GND, Servo GND, IR Sensor GND
 
-  The TP4056 module ON THE CAR receives 5V from the dock
-  and charges the 18650 batteries automatically.
+IR Sensor (detects car):
+  FC-51 OUT --> Nano D2
 
-  TP4056 LED indicators (built-in):
-    Red  = Charging
-    Blue = Fully charged
+Servo (swings charging cable):
+  SG90 Signal --> Nano D9
 
-Physical layout (top view):
+Charging Cable:
+  USB 5V  --> Thin wire through servo arm --> Magnetic connector (+)
+  USB GND --> Thin wire through servo arm --> Magnetic connector (-)
 
-  ┌─────────────────────────┐
-  │     CHARGING DOCK       │
-  │                         │
-  │   ┌──┐           ┌──┐  │
-  │   │+ │  ← pogo → │- │  │ ← spring-loaded pins
-  │   └──┘   pins    └──┘  │
-  │         ═══════         │ ← guide rails (cardboard/3D print)
-  │        /       \        │
-  │       /   CAR   \       │ ← car drives in here
-  │      /  drives  \       │
-  └─────/   in here  \─────┘
+Status LEDs:
+  Nano D4 --> 220 ohm resistor --> Red LED --> GND   (charging)
+  Nano D5 --> 220 ohm resistor --> Green LED --> GND  (complete)
 
-  Car rear (where copper pads are):
+Physical Layout (top view):
 
-  ┌─────────────────┐
-  │     CAR REAR    │
-  │  ┌────┐  ┌────┐ │
-  │  │ +  │  │ -  │ │ ← copper tape pads
-  │  └────┘  └────┘ │
-  └─────────────────┘
+  ┌──────────────────────────────┐
+  │       SUPERCHARGER DOCK      │
+  │                              │
+  │   [Nano]        [IR Sensor]  │
+  │                    |         │
+  │         [Servo]────┘         │
+  │          /                   │
+  │   cable / (swings out        │
+  │        /   to reach car)     │
+  │       /                      │
+  │  [mag connector]             │
+  │         ↕                    │
+  │     [CAR parks here]         │
+  │                              │
+  └──────────────────────────────┘
+
+Servo Arm Positions:
+  Retracted (90°)  = cable tucked in, waiting
+  Extended  (0°)   = cable swung out to car's charge port
+
+Car Charge Port Location:
+  Mount the magnetic connector on the rear-left of the car,
+  matching the driver-side charge port on a real Tesla.
 ```
 
 ## ESP32-CAM Pinout Reference
@@ -117,21 +146,14 @@ Physical layout (top view):
                  │  ┌───────┐  │
             3V3 ─┤  │CAMERA │  ├─ 5V
            IO16 ─┤  │       │  ├─ GND
-           IO0  ─┤  │       │  ├─ IO12
-           GND  ─┤  └───────┘  ├─ IO13  --> IN3
-           VCC  ─┤    [LED]    ├─ IO15  --> IN2
-           IO14 ─┤             ├─ IO14  --> IN1
-           IO2  ─┤             ├─ IO2   --> IN4
-           IO4  ─┤  [SD CARD]  ├─ IO4   (flash LED)
+            IO0 ─┤  │       │  ├─ IO12 --> TP4056 STDBY
+            GND ─┤  └───────┘  ├─ IO13 --> L298N IN3
+            VCC ─┤    [LED]    ├─ IO15 --> L298N IN2
+           IO14 ─┤             ├─ IO14 --> L298N IN1
+            IO2 ─┤             ├─ IO2  --> L298N IN4
+            IO4 ─┤  [SD CARD]  ├─ IO4  (flash LED)
                  └─────────────┘
+
+  IO16 --> TP4056 CHRG (charging status)
+  IO12 --> TP4056 STDBY (fully charged status)
 ```
-
-## Optional Upgrades (later)
-
-| Component | Price | What it adds |
-|-----------|-------|-------------|
-| HC-SR04 Ultrasonic Sensor | $2-3 | Obstacle avoidance / auto-park into dock |
-| LEDs (white + red) | $1 | Headlights & taillights |
-| Buzzer | $0.50 | Horn! |
-| Servo SG90 | $2-3 | Pan camera left/right |
-| 3D printed Tesla shell | $10-20 | Looking sick |
