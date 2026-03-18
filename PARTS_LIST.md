@@ -27,7 +27,8 @@
 | 14 | Red LED | 1 | $0.25 | "5mm red LED" |
 | 15 | Green LED | 1 | $0.25 | "5mm green LED" |
 | 16 | 220 ohm Resistors | 2 | $0.25 | "220 ohm resistor pack" |
-| 17 | 5V USB Power Supply | 1 | $0 | Any phone charger + USB cable |
+| 17 | Black Heat Shrink Tubing (3mm) | 1 ft | $1 | "heat shrink tubing 3mm black" |
+| 18 | 5V USB Power Supply | 1 | $0 | Any phone charger + USB cable |
 
 **Dock subtotal: ~$9-14**
 
@@ -90,52 +91,69 @@ Note: Remove the ENA/ENB jumpers on L298N for full speed,
 ## Wiring Diagram — Supercharger Dock
 
 ```
-Arduino Nano + Servo + IR Sensor
-==================================
+Arduino Nano + Servo + IR Sensor (Vertical Stall)
+===================================================
 
 Power (from USB):
   USB 5V  --> Nano 5V, Servo VCC, IR Sensor VCC
   USB GND --> Nano GND, Servo GND, IR Sensor GND
 
-IR Sensor (detects car):
+IR Sensor (at base of stall, detects car):
   FC-51 OUT --> Nano D2
 
-Servo (swings charging cable):
+Servo (at top of stall, holds/releases cable):
   SG90 Signal --> Nano D9
 
-Charging Cable:
-  USB 5V  --> Thin wire through servo arm --> Magnetic connector (+)
-  USB GND --> Thin wire through servo arm --> Magnetic connector (-)
+Charging Cable (runs from USB up through stall, through servo guide loop, hangs down):
+  USB 5V  --> wire up stall --> through servo horn loop --> down to magnetic tip (+)
+  USB GND --> wire up stall --> through servo horn loop --> down to magnetic tip (-)
 
-Status LEDs:
+Status LEDs (on stall face):
   Nano D4 --> 220 ohm resistor --> Red LED --> GND   (charging)
   Nano D5 --> 220 ohm resistor --> Green LED --> GND  (complete)
 
-Physical Layout (top view):
+Physical Layout (side view):
 
-  ┌──────────────────────────────┐
-  │       SUPERCHARGER DOCK      │
-  │                              │
-  │   [Nano]        [IR Sensor]  │
-  │                    |         │
-  │         [Servo]────┘         │
-  │          /                   │
-  │   cable / (swings out        │
-  │        /   to reach car)     │
-  │       /                      │
-  │  [mag connector]             │
-  │         ↕                    │
-  │     [CAR parks here]         │
-  │                              │
-  └──────────────────────────────┘
+  ┌──────┐
+  │STALL │  ← 3D printed or cardboard, ~15-20cm tall
+  │      │
+  │[servo]│ ← at top, servo horn has a small hook/loop
+  │      │╲
+  │      │ ╲  flexible silicone cable
+  │      │  ╲ (wrapped in black heat shrink)
+  │      │   ╲
+  │      │    ● ← magnetic connector tip
+  │      │    ↕
+  │      │   [CAR charge port]
+  │[LEDs]│    ← red/green on stall face
+  │[IR]──│──→ ← IR sensor at base, points at parking spot
+  └──────┘
+  [Nano]   ← inside or behind the stall
+  [USB]    ← powers everything
 
-Servo Arm Positions:
-  Retracted (90°)  = cable tucked in, waiting
-  Extended  (0°)   = cable swung out to car's charge port
+How the cable works:
+  - Servo horn has a small loop (bent paperclip or 3D printed hook)
+  - Cable passes through this loop
+  - When servo rotates UP: cable is pulled tight against stall
+  - When servo rotates DOWN: cable drops, gravity lowers it to car
+  - Magnetic tip snaps onto car's charge port on contact
+  - Cable hangs naturally between stall and car while charging
+
+Servo Positions:
+  CABLE_UP   (160°) = cable held tight against stall, retracted
+  CABLE_DOWN  (40°) = cable released, hangs to car level
 
 Car Charge Port Location:
-  Mount the magnetic connector on the rear-left of the car,
+  Mount the magnetic connector pad on the rear-left of the car,
   matching the driver-side charge port on a real Tesla.
+
+Cable Assembly:
+  1. Cut ~25cm of thin silicone wire (2 wires: +/-)
+  2. Thread both through a length of black heat shrink tubing
+  3. Solder magnetic pogo connector to one end (the tip)
+  4. Connect other end to USB 5V/GND
+  5. Thread the cable through the servo horn's guide loop
+  6. Done — it should hang and swing freely
 ```
 
 ## ESP32-CAM Pinout Reference

@@ -9,7 +9,7 @@ Drive with a PS5 controller from your Mac or PC while watching a live camera fee
 - **Live FPV Camera** — 640x480 MJPEG stream from the ESP32-CAM to any browser
 - **PS5 DualSense Controller** — drive from your computer via browser Gamepad API
 - **Keyboard & Touch Controls** — arrow keys, WASD, or on-screen buttons
-- **Auto-Plug Supercharger Dock** — IR sensor detects the car, servo arm swings a magnetic cable to the charge port, charges the 18650s, retracts when done
+- **Auto-Plug Supercharger Dock** — vertical stall with a hanging cable, just like a real Tesla Supercharger. IR sensor detects the car, servo lowers the magnetic cable, gravity drops it to the charge port, retracts when done
 - **Lithium-Ion Powered** — 2x 18650 rechargeable cells (same chemistry as Tesla)
 - **Battery Status** — web interface shows charging state with animated bar
 - **Motor Safety** — motors auto-disable while charging
@@ -45,27 +45,35 @@ Drive with a PS5 controller from your Mac or PC while watching a live camera fee
 ## How the Supercharger Works
 
 ```
-  1. Car parks near dock
-  2. IR sensor detects the car
-  3. Arduino Nano triggers the SG90 servo
-  4. Servo arm swings magnetic cable to car's charge port
-  5. Magnetic connector snaps onto contact pads
-  6. TP4056 charges the 18650 batteries
-  7. Red LED = charging, Green LED = full
-  8. When full, servo retracts the cable automatically
+  1. Car parks next to the Supercharger stall
+  2. IR sensor at the base detects the car
+  3. Arduino Nano tells the servo to release
+  4. Servo at the top slowly lowers the cable
+  5. Gravity drops the flexible cable to car level
+  6. Magnetic tip snaps onto the car's charge port
+  7. TP4056 charges the 18650 batteries
+  8. Red LED = charging, Green LED = full
+  9. When done, servo reels the cable back up
 ```
 
 ```
   Side view:
 
-  [SUPERCHARGER]          [CAR]
-       |                    |
-       |    servo arm       |
-       |   ╭──────────╮    |
-       |   │  cable    │--->|=| charge port
-       |   ╰──────────╯    |
-       |                    |
-   [IR sensor] -----> detects car
+  ┌──────┐
+  │STALL │  ← vertical column (~15-20cm)
+  │      │
+  │[servo]│ ← holds cable up at rest
+  │      │╲
+  │      │ ╲  silicone cable in heat shrink
+  │      │  ╲ (hangs like a real Supercharger)
+  │      │   ╲
+  │      │    ● magnetic tip
+  │      │    ↕
+  │      │   [CAR charge port]
+  │[LEDs]│
+  │[IR]──│──→ detects car
+  └──────┘
+  [Nano]   ← inside stall
 ```
 
 ## Parts List (~$45-60)
